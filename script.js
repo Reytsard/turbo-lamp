@@ -1,9 +1,11 @@
 const gameBoard = () => {
-    let gameArea =document.querySelector('#gameArea');
-    let gameboard = [0,0,0,0,0,0,0,0,0];
+    let gameArea = document.querySelector('#gameArea');
+    let gameboard = [null,null,null,null,null,null,null,null,null];
+    let turnCount = 1;
+    let playerTurn = player1;
     const removeWelcomeDiv = () => {
         console.log('clicked for removeWelDiv');
-        const gameDiv = '<div id="game">\n<div id="gameBox">\n<div class="box">\n<button class="open" type="button" value="0"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="1"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="2"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="3"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="4"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="5"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="6"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="7"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="8"></button>\n</div>\n\n</div>\n</div>\n<div class="game-status">Player 1\'s Turn</div>\n';
+        const gameDiv = '<div id="game">\n<div id="gameBox">\n<div class="box">\n<button class="open" type="button" value="0"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="1"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="2"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="3"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="4"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="5"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="6"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="7"></button>\n</div>\n<div class="box">\n<button class="open" type="button" value="8"></button>\n</div>\n\n</div>\n</div>\n<div class="game-status" data-value="1">Player 1\'s Turn</div>\n';
         gameArea.innerHTML = gameDiv;
         let buttons = document.querySelectorAll('.box button');
             buttons.forEach(button => {
@@ -11,29 +13,48 @@ const gameBoard = () => {
                     button.classList.toggle('open');
                     button.classList.toggle('selected');
                     button.toggleAttribute('disabled');
-                    
-                    console.log(`button: ${button.value}`);
+                    addPick(playerTurn,button.value,gameboard);
+                    changePlayer(); 
                 });
-        });
+            });
+        }
+    const changePlayer = () => {
+            const gameStatus = gameArea.querySelector('.game-status');
+        if(turnCount == 9){
+            removeGameDiv();
+        }else if(turnCount % 2 == 0){
+            turnCount++;
+            gameStatus.innerHTML = 'Player 1\'s Turn';
+            gameStatus.setAttribute('data-value', '1');
+            playerTurn = player1;
+        }else{
+            turnCount++;
+            gameStatus.innerHTML = 'Player 2\'s Turn';
+            gameStatus.setAttribute('data-value', '2');
+            playerTurn = player2;
+        }
     }
     const removeGameDiv = () => {
         const endDiv = '<div id="end-status">\n<div class="es-text">Game Over Player 1 Wins</div>\n<div class="es-buttons">\n<button id="try-again" type="button">Try Again</button>\n</div>\n</div>\n'
         gameArea.innerHTML = endDiv;
     }
-    return {removeWelcomeDiv,removeGameDiv}
+    const addPick = (player, indexValue, gameboard) =>{
+        gameboard[indexValue] = player.playerNumber;
+    }
+    return {removeWelcomeDiv}
 };
 
-const playerFactory = (name) => {
+const playerFactory = (name, symbol) => {
     const playerName = () => name;
-    return {playerName};
-}
-
-function addPickToArray(player,buttonValue){
-
+    const playerNumber = symbol;
+    return {playerName, playerNumber};
 }
 
 
-const gameboard = gameBoard();
+
+const player1 = playerFactory('player1', '1');
+const player2 = playerFactory('player2', '2');
+const gameboard = gameBoard(); 
 const welcomeDiv = gameArea.querySelector('#welcome');
 welcomeDiv.querySelector('.start-button').addEventListener('click',gameboard.removeWelcomeDiv);
 
