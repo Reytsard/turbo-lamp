@@ -33,16 +33,15 @@ body{
     grid-column: 1 / span 1;
     grid-row:  1 / span 1;
     width: min(600px, 100%);
-    height: min(600px, 100%);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* grid-template-rows: repeat(3, 1fr); */
+    grid-template-rows: repeat(3, 1fr);
 }
 .box{
     aspect-ratio: 1 / 1;
     background-color: black;
     border: 1px solid white;
-    font-size: 10rem;
+    font-size: 3em;
     color: white;
     display: grid;
     place-items: center;

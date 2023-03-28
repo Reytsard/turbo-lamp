@@ -3,7 +3,7 @@ const playerFactory = (name,symbol) => {
     const playerSymbol =  symbol;
     let picks = [];
     let hasWon = false;
-    return{playerSymbol, picks, hasWon};
+    return{playerName ,playerSymbol, picks, hasWon};
 };
 const game = (() => {
     const winningCombinations = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
@@ -32,16 +32,25 @@ const game = (() => {
         header.innerHTML = "player "+playerTurn+"'s Turn";
     }
     let gameBoxes = document.querySelectorAll('.box');
+    const stopGame = () => gameBoxes.forEach(box => {
+        box.style.pointerEvents = 'none';
+    })
     gameBoxes.forEach(button => {
         button.addEventListener('click', () => {
-            
             setPick(button);
             addToPick(button);
             button.style.pointerEvents = 'none';
             checkIfPlayerWon(gameBoardArr,winningCombinations,playerTurn);
             changePlayer();
+            if(player1.hasWon || player2.hasWon){
+                stopGame();
+                player1.hasWon ? showWinner(player1) : showWinner(player2);
+            }
         });
     });
+    const showWinner = (player) => {
+        document.querySelector('#header').innerHTML = "player "+player.playerName+" Has Won";
+    };  
     const setPick = (button) => {
         let arrayIndex = button.dataset.value;
         if(playerTurn == 1){
@@ -70,8 +79,6 @@ const game = (() => {
                 }
             }
         }
-        console.log(gameBoardArr);
-        console.log(player1.hasWon, ' : ', player2.hasWon);
     }
     return{start};
     
