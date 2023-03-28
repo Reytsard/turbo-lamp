@@ -42,6 +42,10 @@ body{
     aspect-ratio: 1 / 1;
     background-color: black;
     border: 1px solid white;
+    font-size: 10rem;
+    color: white;
+    display: grid;
+    place-items: center;
 }
 .box:hover{
     background-color: gray;
